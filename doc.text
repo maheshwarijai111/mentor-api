@@ -1,0 +1,70 @@
+CREATE TABLE users (
+    user_id INT PRIMARY KEY AUTO_INCREMENT,
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
+    email VARCHAR(100) UNIQUE,
+    password_hash VARCHAR(255),
+    role ENUM('mentor', 'mentee') NOT NULL,
+    location VARCHAR(100),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE mentors (
+    mentor_id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT UNIQUE,
+    bio TEXT,
+    linkedin_url varchar(100),
+    expertise_area TEXT,
+    years_of_experience INT,
+    availability_schedule TEXT,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+);
+
+CREATE TABLE mentees (
+    mentee_id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT UNIQUE,
+    bio TEXT,
+    goal TEXT, -- Mentorship goal
+    availability_schedule TEXT, -- E.g., JSON format for time slots
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+);
+CREATE TABLE mentorships (
+    mentorship_id INT PRIMARY KEY AUTO_INCREMENT,
+    mentor_id INT,
+    mentee_id INT,
+    start_date DATE,
+    end_date DATE,
+    status ENUM('active', 'completed', 'cancelled') DEFAULT 'active',
+    FOREIGN KEY (mentor_id) REFERENCES mentors(mentor_id) ON DELETE CASCADE,
+    FOREIGN KEY (mentee_id) REFERENCES mentees(mentee_id) ON DELETE CASCADE
+);
+
+CREATE TABLE messages (
+    message_id INT PRIMARY KEY AUTO_INCREMENT,
+    sender_id INT,
+    receiver_id INT,
+    mentorship_id INT,
+    content TEXT,
+    sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (sender_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (receiver_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (mentorship_id) REFERENCES mentorships(mentorship_id) ON DELETE CASCADE
+);
+
+CREATE TABLE reviews (
+    review_id INT PRIMARY KEY AUTO_INCREMENT,
+    mentorship_id INT,
+    reviewer_id INT,
+    rating INT CHECK (rating BETWEEN 1 AND 5),
+    comment TEXT,
+    reviewed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (mentorship_id) REFERENCES mentorships(mentorship_id) ON DELETE CASCADE,
+    FOREIGN KEY (reviewer_id) REFERENCES mentees(mentee_id) ON DELETE CASCADE
+);
+
+Summary
+users table holds the basic information for both mentors and mentees.
+mentors and mentees tables contain additional profile-specific details.
+mentorships table tracks mentor-mentee relationships.
+messages and reviews tables provide messaging and feedback features.
