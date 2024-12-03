@@ -14,6 +14,15 @@ type User struct {
 	UpdatedAt    time.Time `gorm:"column:updated_at" json:"updated_at"`
 }
 
+type UserList struct {
+	ID        uint   `gorm:"column:user_id" json:"id"`
+	FirstName string `gorm:"type:varchar(100);column:first_name" json:"first_name"`
+	LastName  string `gorm:"type:varchar(100);column:last_name" json:"last_name"`
+	Email     string `gorm:"uniqueIndex;type:varchar(100);column:email" json:"email"`
+	Role      string `gorm:"type:varchar(50);column:role" json:"role"`
+	Location  string `gorm:"type:varchar(100);column:location" json:"location"`
+}
+
 func (User) TableName() string {
 	return "users"
 }
