@@ -7,7 +7,7 @@ import (
 )
 
 func UserApiRequestHandler(route *gin.RouterGroup) {
-	route.GET("profile", controllers.GetProfile)
+	route.GET("profile/*id", controllers.GetProfile)
 	route.POST("profile", controllers.CreateProfile)
 	route.PUT("profile", controllers.UpdateProfile)
 }

@@ -5,6 +5,7 @@ import (
 	"mentor/models"
 	"mentor/utils"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
@@ -12,13 +13,22 @@ import (
 
 func GetProfile(c *gin.Context) {
 
+	idStr := c.Param("id")
+	id, _ := strconv.Atoi(idStr[1:])
 	var user []models.UserList
-	if err := database.DB.Table("users").Find(&user).Error; err != nil {
-		utils.RespondJSON(c, http.StatusNotFound, "User not found", nil, gin.H{"details": err.Error()})
-		return
+	if id == 0 {
+		if err := database.DB.Table("users").Find(&user).Error; err != nil {
+			utils.RespondJSON(c, http.StatusNotFound, "User not found", nil, gin.H{"details": err.Error()})
+			return
+		}
+	} else {
+		if err := database.DB.Table("users").Where("user_id = ?", id).Find(&user).Error; err != nil {
+			utils.RespondJSON(c, http.StatusNotFound, "User not found", nil, gin.H{"details": err.Error()})
+			return
+		}
 	}
 
-	utils.RespondJSON(c, http.StatusOK, "Users etrieved successfully", user, nil)
+	utils.RespondJSON(c, http.StatusOK, "Users retrieved successfully", user, nil)
 }
 
 func CreateProfile(c *gin.Context) {
