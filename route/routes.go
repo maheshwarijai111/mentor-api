@@ -11,3 +11,8 @@ func UserApiRequestHandler(route *gin.RouterGroup) {
 	route.POST("profile", controllers.CreateProfile)
 	route.PUT("profile", controllers.UpdateProfile)
 }
+
+func LeadRequestHandler(route *gin.RouterGroup) {
+	route.POST("create_lead", controllers.CreateLead)
+	route.GET("list", controllers.GetLeadList)
+}

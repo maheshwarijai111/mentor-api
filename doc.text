@@ -63,6 +63,17 @@ CREATE TABLE reviews (
     FOREIGN KEY (reviewer_id) REFERENCES mentees(mentee_id) ON DELETE CASCADE
 );
 
+CREATE TABLE leads (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100),
+    email VARCHAR(100) UNIQUE,
+    mobile VARCHAR(50),
+    location VARCHAR(100),
+    message text,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 Summary
 users table holds the basic information for both mentors and mentees.
 mentors and mentees tables contain additional profile-specific details.

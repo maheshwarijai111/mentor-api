@@ -21,6 +21,7 @@ func main() {
 		AllowCredentials: true,
 	}))
 	route.UserApiRequestHandler(router.Group("users"))
+	route.LeadRequestHandler(router.Group("lead"))
 	database.ConnectDatabase()
 
 	router.Run(":3000")
