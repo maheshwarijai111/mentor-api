@@ -2,6 +2,7 @@ package main
 
 import (
 	"mentor/database"
+	middlewares "mentor/middleware"
 	"mentor/route"
 
 	"github.com/gin-contrib/cors"
@@ -13,6 +14,10 @@ func main() {
 	router := gin.Default()
 
 	// Add CORS middleware
+	// Public routes
+	route.AuthRoutes(router)
+	router.Use(middlewares.JWTAuthMiddleware())
+
 	router.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"http://localhost:4200"}, // Angular origin
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},

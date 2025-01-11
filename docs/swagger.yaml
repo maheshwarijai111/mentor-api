@@ -1,0 +1,8 @@
+host: localhost:3000
+info:
+  contact: {}
+  description: A Mentor service API in Go using Gin framework
+  title: Mentor Service API
+  version: "1.0"
+paths: {}
+swagger: "2.0"

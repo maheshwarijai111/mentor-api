@@ -2,9 +2,14 @@ package route
 
 import (
 	"mentor/controllers"
+	middlewares "mentor/middleware"
 
 	"github.com/gin-gonic/gin"
 )
+
+func AuthRoutes(router *gin.Engine) {
+	router.POST("/login", middlewares.LoginHandler)
+}
 
 func UserApiRequestHandler(route *gin.RouterGroup) {
 	route.GET("profile/*id", controllers.GetProfile)

@@ -1,6 +1,11 @@
 package models
 
-import "time"
+import (
+	"mentor/database"
+	"time"
+
+	"golang.org/x/crypto/bcrypt"
+)
 
 type User struct {
 	ID           uint      `gorm:"primaryKey;column:id" json:"id"`
@@ -21,6 +26,22 @@ type UserList struct {
 	Email     string `gorm:"uniqueIndex;type:varchar(100);column:email" json:"email"`
 	Role      string `gorm:"type:varchar(50);column:role" json:"role"`
 	Location  string `gorm:"type:varchar(100);column:location" json:"location"`
+}
+
+func VerifyUserInDB(username, password string) bool {
+	var user User
+	result := database.DB.Where("email = ?", username).Find(&user)
+	if password != "" {
+		err := bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(password))
+		if err != nil {
+			return false
+		}
+	}
+	if result.Error == nil && result.RowsAffected > 0 {
+		return true
+	} else {
+		return false
+	}
 }
 
 func (User) TableName() string {
