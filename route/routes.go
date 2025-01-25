@@ -9,11 +9,11 @@ import (
 
 func AuthRoutes(router *gin.Engine) {
 	router.POST("/login", middlewares.LoginHandler)
+	router.POST("profile", controllers.CreateProfile)
 }
 
 func UserApiRequestHandler(route *gin.RouterGroup) {
 	route.GET("profile/*id", controllers.GetProfile)
-	route.POST("profile", controllers.CreateProfile)
 	route.PUT("profile", controllers.UpdateProfile)
 }
 
